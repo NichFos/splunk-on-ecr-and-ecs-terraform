@@ -106,10 +106,11 @@ It should look similar to this: ```splunk-lb-dns = "http://splunkapp-lb01-680620
 
 
 
+The username will be admin and the password will be whatever environment variable that you set in your aws_ecs_task_definition on line 46.
+
+
 
 If you have done your deployment correctly, you should a screen similar to the image below when you input your load balancer DNS into your browser.
-
-The username will be admin and the password will be whatever environment variable that you set in your aws_ecs_task_definition on line 46.
 
 
 
