@@ -1,12 +1,12 @@
 resource "aws_ecs_cluster" "splunkapp_cluster" {
-  name = "splunkapp-cluster"
+  name   = "splunkapp-cluster"
   region = "eu-west-1"
 
-    configuration {
-      execute_command_configuration {
-        logging = "DEFAULT"
-      }
+  configuration {
+    execute_command_configuration {
+      logging = "DEFAULT"
     }
+  }
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -17,8 +17,9 @@ resource "aws_ecs_capacity_provider" "splunk_capacity_provider" {
   name = "splunk-capacity-provider"
 
   auto_scaling_group_provider {
-    auto_scaling_group_arn         = aws_autoscaling_group.splunkapp_asg01.arn 
+    auto_scaling_group_arn         = aws_autoscaling_group.splunkapp_asg01.arn
     managed_termination_protection = "ENABLED"
+    managed_draining               = "DISABLED"
 
     managed_scaling {
       maximum_scaling_step_size = 2
@@ -34,7 +35,7 @@ resource "aws_ecs_cluster_capacity_providers" "attach" {
   capacity_providers = [aws_ecs_capacity_provider.splunk_capacity_provider.name]
 
   default_capacity_provider_strategy {
-    capacity_provider = aws_ecs_capacity_provider.splunk_capacity_provider.name 
+    capacity_provider = aws_ecs_capacity_provider.splunk_capacity_provider.name
     weight            = 1
     base              = 0
   }

@@ -1,34 +1,3 @@
-# Instance role /profile
-data "aws_iam_role" "splunk_ecs_taskrole" {
-  name = "splunk-ecs-taskrole"
-}
-
-data "aws_iam_policy_document" "ecs_instance_assume" {
-  statement {
-    effect    = "Allow"
-    actions   = ["sts:AssumeRole"]
-    principals { 
-      type = "Service" 
-      identifiers = ["ec2.amazonaws.com"] 
-      }
-  }
-}
-
-resource "aws_iam_role" "ecs_instance_role" {
-  name               = "ecsInstanceRole"
-  assume_role_policy = data.aws_iam_policy_document.ecs_instance_assume.json
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_for_ec2" {
-  role       = aws_iam_role.ecs_instance_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-}
-
-resource "aws_iam_instance_profile" "ecs_instance_role_profile" {
-  name = "ecsInstanceProfile"
-  role = aws_iam_role.ecs_instance_role.name
-}
-
 resource "aws_cloudwatch_log_group" "splunkapp_logs" {
   name              = "/ecs/splunkapp"
   retention_in_days = 7
@@ -41,8 +10,8 @@ resource "aws_ecs_task_definition" "splunk-task-df" {
   cpu                      = "1024"
   memory                   = "3024"
   requires_compatibilities = ["EC2"]
-  execution_role_arn       = data.aws_iam_role.splunk_ecs_taskrole.arn
-  task_role_arn            = data.aws_iam_role.splunk_ecs_taskrole.arn
+  execution_role_arn       = aws_iam_role.splunk_ecs_taskrole.arn
+  task_role_arn            = aws_iam_role.splunk_ecs_taskrole.arn
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "X86_64"
