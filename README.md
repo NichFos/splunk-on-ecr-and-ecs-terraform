@@ -113,7 +113,7 @@ The username will be admin and the password will be whatever environment variabl
 
 
 
-![alt text](images\splunk-7.1.0-1.png)
+![alt text](https://github.com/NichFos/splunk-on-ecr-and-ecs-terraform/blob/main/images/splunk-7.1.0-1.png)
 
 
 
